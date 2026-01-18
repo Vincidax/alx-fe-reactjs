@@ -2,17 +2,26 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
-      <Link to="/" style={{ marginRight: "1rem" }}>
+    <nav
+      style={{
+        backgroundColor: "#333",
+        display: "flex",
+        justifyContent: "space-around",
+        padding: "1rem",
+      }}
+    >
+      <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>
         Home
       </Link>
-      <Link to="/about" style={{ marginRight: "1rem" }}>
+      <Link to="/about" style={{ color: "#fff", textDecoration: "none" }}>
         About
       </Link>
-      <Link to="/services" style={{ marginRight: "1rem" }}>
-        Services
+      <Link to="/dashboard" style={{ color: "#fff", textDecoration: "none" }}>
+        Dashboard
       </Link>
-      <Link to="/contact">Contact</Link>
+      <Link to="/profile" style={{ color: "#fff", textDecoration: "none" }}>
+        Profile
+      </Link>
     </nav>
   );
 }
