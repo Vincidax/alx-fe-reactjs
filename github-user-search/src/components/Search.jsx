@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { searchUsers } from "../services/githubService";
+import { fetchUserData, searchUsers } from "../services/githubService";
 
 export default function Search() {
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
-  const [minRepos, setRepos] = useState("");
+  const [minRepos, setMinRepos] = useState("");
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -12,23 +12,30 @@ export default function Search() {
 
   const handleSearch = async (e, resetPage = true) => {
     e.preventDefault();
-
     if (!query) return;
 
     setLoading(true);
     setError(false);
 
     try {
-      const currentPage = resetPage ? 1 : page + 1;
-      const data = await searchUsers({
-        query,
-        location,
-        minRepos,
-        page: currentPage,
-      });
+      if (!location && !minRepos) {
+        // Basic search (Task 1)
+        const user = await fetchUserData(query);
+        setUsers([user]);
+        setPage(1);
+      } else {
+        // Advanced search (Task 2)
+        const currentPage = resetPage ? 1 : page + 1;
+        const data = await searchUsers({
+          query,
+          location,
+          minRepos,
+          page: currentPage,
+        });
 
-      setUsers(resetPage ? data : [...users, ...data]);
-      setPage(currentPage);
+        setUsers(resetPage ? data : [...users, ...data]);
+        setPage(currentPage);
+      }
     } catch (err) {
       setError(true);
     } finally {
@@ -62,8 +69,8 @@ export default function Search() {
           type="number"
           placeholder="Min repositories"
           className="border p-2 rounded"
-          value={repos}
-          onChange={(e) => setRepos(e.target.value)}
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
         />
 
         <button
@@ -85,7 +92,7 @@ export default function Search() {
         {users.map((user) => (
           <div
             key={user.login}
-            className="border p-4 rounded flex gap-4 items-center"
+            className="border p-4 rounded flex gap-4 items-center bg-white"
           >
             <img
               src={user.avatar_url}
@@ -111,7 +118,7 @@ export default function Search() {
         ))}
       </div>
 
-      {users.length > 0 && !loading && (
+      {users.length > 0 && !loading && location && minRepos && (
         <button
           onClick={(e) => handleSearch(e, false)}
           className="mt-6 w-full border py-2 rounded hover:bg-gray-100"
