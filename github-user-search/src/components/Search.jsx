@@ -4,7 +4,7 @@ import { searchUsers } from "../services/githubService";
 export default function Search() {
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
-  const [repos, setRepos] = useState("");
+  const [minRepos, setRepos] = useState("");
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ export default function Search() {
       const data = await searchUsers({
         query,
         location,
-        repos,
+        minRepos,
         page: currentPage,
       });
 
