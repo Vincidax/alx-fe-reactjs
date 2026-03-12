@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddRecipeForm = ({ onAdd }) => {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
-  const [instructions, setInstructions] = useState("");
+  const [steps, setSteps] = useState(""); // renamed from instructions
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -12,8 +12,7 @@ const AddRecipeForm = ({ onAdd }) => {
     const newErrors = {};
     if (!title.trim()) newErrors.title = "Title is required";
     if (!ingredients.trim()) newErrors.ingredients = "Ingredients are required";
-    if (!instructions.trim())
-      newErrors.instructions = "Instructions are required";
+    if (!steps.trim()) newErrors.steps = "Preparation steps are required";
 
     if (ingredients.trim().split("\n").length < 2)
       newErrors.ingredients = "Please list at least 2 ingredients";
@@ -31,27 +30,28 @@ const AddRecipeForm = ({ onAdd }) => {
       summary: title,
       image: "https://via.placeholder.com/300",
       ingredients: ingredients.split("\n"),
-      instructions: instructions.split("\n"),
+      steps: steps.split("\n"), // renamed from instructions
     };
 
     onAdd(newRecipe);
 
-    // Clear form
     setTitle("");
     setIngredients("");
-    setInstructions("");
+    setSteps(""); // clear steps
     setErrors({});
 
-    // Redirect to home
     navigate("/");
   };
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-xl shadow-md mt-8">
+      <Link to="/" className="inline-block mt-6 text-blue-500 hover:underline">
+        ← Back to Recipes
+      </Link>
       <h2 className="text-2xl font-bold mb-6 text-center">Add New Recipe</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title */}
+        {/* Recipe Title */}
         <div>
           <label className="block font-semibold mb-1">Recipe Title</label>
           <input
@@ -85,21 +85,21 @@ const AddRecipeForm = ({ onAdd }) => {
           )}
         </div>
 
-        {/* Instructions */}
+        {/* Steps */}
         <div>
           <label className="block font-semibold mb-1">
             Preparation Steps (one per line)
           </label>
           <textarea
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
+            value={steps}
+            onChange={(e) => setSteps(e.target.value)}
             rows={4}
             className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-              errors.instructions ? "border-red-500" : "border-gray-300"
+              errors.steps ? "border-red-500" : "border-gray-300"
             }`}
           />
-          {errors.instructions && (
-            <p className="text-red-500 text-sm mt-1">{errors.instructions}</p>
+          {errors.steps && (
+            <p className="text-red-500 text-sm mt-1">{errors.steps}</p>
           )}
         </div>
 

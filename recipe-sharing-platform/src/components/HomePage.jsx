@@ -1,6 +1,16 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import recipesData from "../data.json";
 
-const HomePage = ({ recipes }) => {
+const HomePage = () => {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRecipes(recipesData);
+    }, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="text-3xl font-bold text-center mb-6">
