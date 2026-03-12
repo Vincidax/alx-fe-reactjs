@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import recipesData from "../data.json";
 
 const HomePage = () => {
-  const [recipes] = useState(recipesData);
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(() => {
+    setRecipes(recipesData);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -24,6 +28,7 @@ const HomePage = () => {
 
             <div className="p-4">
               <h2 className="text-xl font-semibold">{recipe.title}</h2>
+
               <p className="text-gray-600 text-sm mt-2">{recipe.summary}</p>
 
               <button className="mt-4 text-blue-500 hover:underline">
